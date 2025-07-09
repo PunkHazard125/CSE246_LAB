@@ -11,16 +11,17 @@ typedef vector<int> vi;
 
 const int64_t LIMIT = 1e6;
 
-int merge_list(vi& list, int start, int mid, int end) {
+int merge_list(vector<int>& list, int start, int mid, int end) {
 
-    vi left(list.begin() + start, list.begin() + mid + 1);
-    vi right(list.begin() + mid + 1, list.begin() + end + 1);
+    vector<int> left(list.begin() + start, list.begin() + mid + 1);
+    vector<int> right(list.begin() + mid + 1, list.begin() + end + 1);
 
-    int count = 0;
+    left.push_back(INT_MAX);
+    right.push_back(INT_MAX);
 
-    int i = 0, j = 0, k = start;
+    int i = 0, j = 0, k = start, count = 0;
 
-    while (i < left.size() && j < right.size())
+    while (k <= end)
     {
         if (left[i] <= right[j])
         {
@@ -29,37 +30,25 @@ int merge_list(vi& list, int start, int mid, int end) {
         else
         {
             list[k++] = right[j++];
-            count += left.size() - i;
+            count += (left.size() - i - 1);
         }
     }
 
-    while (i < left.size())
-    {
-        list[k++] = left[i++];
-    }
-    
-    while (j < right.size())
-    {
-        list[k++] = right[j++];
-    }
-    
     return count;
 
 }
 
-int merge_sort(vi& list, int start, int end) {
+int merge_sort(vector<int>& list, int start, int end) {
 
     if (start >= end)
     {
         return 0;
     }
-
-    int count = 0;
-    int mid = start + (end - start) / 2;
+    
+    int mid = start + (end - start) / 2, count = 0;
 
     count += merge_sort(list, start, mid);
     count += merge_sort(list, mid + 1, end);
-
     count += merge_list(list, start, mid, end);
 
     return count;
